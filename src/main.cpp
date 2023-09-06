@@ -16,11 +16,12 @@ void setupPID()
 {
   pid.SetMode(AUTOMATIC);
   pid.SetOutputLimits(-255, 255);
-  kp = 50.0;
+  kp = 55.0;
   ki = 0.0;
   kd = 0.0;
-  setpoint = 50.0;
+  setpoint = 25.0;
   pid.SetTunings(kp, ki, kd);
+  pid.SetSampleTime(10);
 }
 
 void setupMotor()
@@ -40,9 +41,27 @@ void setup()
 
 void loop()
 {
+  if (input == 25)
+  {
+    setpoint = 50;
+    delay(2000);
+  }
+  if (input == 50)
+  {
+    setpoint = 0;
+    delay(2000);
+  }
+  if (input == 0)
+  {
+    setpoint = 25;
+    delay(2000);
+  }
   readEncoder();
   calculatePID();
   driveMotor();
+  Serial.print(setpoint);
+  Serial.print(",");
+  Serial.println(input);
 }
 
 void readEncoder()
